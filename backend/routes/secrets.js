@@ -7,12 +7,12 @@ const { body, validationResult } = require('express-validator');
 //ROUTE 1: fetch all secrets using: GET '/secrets/'
 router.get('/', fetchuser, async (req, res) => {
     try {
-        const secrets = await Secret.find({ user: req.user.id })
-        const anonymousSecret = secrets.map(doc => {
+        const secrets = await Secret.find()
+        const anonymousSecrets = secrets.map(doc => {
             const { user, ...rest } = doc.toObject(); 
             return rest;
           });
-        return res.status(200).json(anonymousSecret);
+        return res.status(200).json(anonymousSecrets);
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -38,7 +38,7 @@ router.post('/', fetchuser, [
             updatedAt: Date.now()
         })
 
-        return res.json(savedSecret);
+        return res.status(200).json(savedSecret);
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -63,7 +63,7 @@ router.put('/:id', fetchuser, async (req, res) => {
 
         //update secret
         secret = await Secret.findByIdAndUpdate(req.params.id, { $set: newSecret }, { new: true })
-        return res.json(secret);
+        return res.status(200).json(secret);
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -82,7 +82,7 @@ router.delete('/:id', fetchuser, async (req, res) => {
 
         //delete secret
         secret = await Secret.findByIdAndDelete(req.params.id);
-        return res.json({ message: "This secret was deleted", secret });
+        return res.status(200).json({ message: "This secret was deleted", secret });
     } catch (error) {
         return res.status(500).json({ error });
     }
