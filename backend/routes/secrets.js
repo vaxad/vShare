@@ -3,6 +3,7 @@ const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Secret = require('../models/Secret');
 const { body, validationResult } = require('express-validator');
+const Comment = require('../models/Comment');
 
 //ROUTE 1: fetch all secrets using: GET '/secrets/'
 router.get('/', fetchuser, async (req, res) => {
@@ -93,9 +94,6 @@ router.get('/fetch/:id', fetchuser, async (req, res) => {
     try {
         const secret = await Secret.findById(req.params.id)
         if (!secret) { return res.status(404).send("Not found") }
-        if (secret.user.toString() != req.user.id) {
-            return res.status(401).send("Not Allowed")
-        }
         return res.status(200).json(secret);
     } catch (error) {
         return res.status(500).json({ error });
@@ -115,5 +113,65 @@ router.get('/fetchmy', fetchuser, async (req, res) => {
 
 })
 
+//ROUTE 7: like/unlike a secret using: PUT '/secrets/like/:id'
+router.patch('/like/:id', fetchuser, async (req, res) => {
+    try {
 
+        //VERIFY USER
+        let secret = await Secret.findById(req.params.id);
+        if (!secret) { return res.status(404).send("Not found") }
+        let newlikes = secret.likes;
+        if(newlikes.includes(req.user.id)){
+            // console.log("includes", newlikes[1], req.user.id)
+            newlikes=newlikes.filter((like)=>like.toString()!==req.user.id)
+        }else{
+            // console.log(" not includes")
+            newlikes.push(req.user.id)
+        }
+        //update secret
+        secret = await Secret.findByIdAndUpdate(req.params.id, { likes: newlikes })
+        return res.status(200).json(secret);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error });
+    }
+})
+
+//ROUTE 8: comment on secret using: POST '/secrets/comment/:id'
+router.post('/comment/:id', fetchuser, async (req, res) => {
+    try {
+        const {content} = req.body
+        //VERIFY USER
+        let secret = await Secret.findById(req.params.id);
+        if (!secret) { return res.status(404).send("Not found") }
+        const comment = await Comment.create({
+            content:content,
+            user:req.user.id,
+            about:req.params.id,
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+        })
+        //send comment
+        return res.status(200).json(comment);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error });
+    }
+})
+
+//ROUTE 9: fetch comments on a secret using: GET '/secrets/comment/:id'
+router.get('/comment/:id', fetchuser, async (req, res) => {
+    try {
+        const {content} = req.body
+        //VERIFY USER
+        let secret = await Secret.findById(req.params.id);
+        if (!secret) { return res.status(404).send("Not found") }
+        const comments = await Comment.find({about:req.params.id})
+        //send comment
+        return res.status(200).json(comments);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error });
+    }
+})
 module.exports = router;

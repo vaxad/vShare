@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const secretSchema = new Schema({
+const commentSchema = new Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'testuser'
     },
-    title:{
-        type:String,
-        required:true
+    about:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'testsecret'
     },
     content:{
         type:String,
@@ -29,4 +29,4 @@ const secretSchema = new Schema({
         required:true
     }
   });
-  module.exports=mongoose.model('testsecret',secretSchema);
+  module.exports=mongoose.model('testcomment',commentSchema);

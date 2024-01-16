@@ -3,10 +3,13 @@
 import store from "@/lib/zustand"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
+import Toast from "./Toast"
 
 export default function () {
-    const {setAuthenticated, setToken, token} = store()
+    const {setAuthenticated, setToken, token, user, setUser, error, text, showToast, warning, setToast, setError, setWarning} = store()
     const path = usePathname()
+    const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
     useEffect(() => {
       if(window){
         const localToken = localStorage.getItem("token")
@@ -25,8 +28,25 @@ export default function () {
         }
       }
     }, [path, token])
+    const getUser=async()=>{
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', 'auth-token':token },
+    };
+      const res = await fetch(`${url}/auth/getuser`, requestOptions)
+      const resData = await res.json()
+      setUser(resData.user)
+    }
+    useEffect(() => {
+      if(token){
+        getUser()
+      }
+    }, [token])
+    
     
   return (
-    <></>
+    <>
+    <Toast error={error} warning={warning} text={text} showToast={showToast} setShowToast={setToast} setError={setError} setWarning={setWarning} />
+    </>
   )
 }

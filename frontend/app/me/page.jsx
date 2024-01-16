@@ -4,11 +4,13 @@ import AuthChecker from '../components/AuthChecker'
 import Navbar from '../components/Navbar'
 import SecretCard from '../components/SecretCard'
 import store from '@/lib/zustand'
+import { useRouter } from 'next/navigation'
 import Loading from '../components/Loading'
 export default function page() {
   const [title, settitle] = useState("")
   const [content, setcontent] = useState("")
   const { setText, setToast, setError, toast } = store()
+  const router = useRouter()
   const handleDiscard=()=>{
     settitle("")
     setcontent("")
@@ -28,7 +30,7 @@ export default function page() {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', 'auth-token':token },
     };
-    const res = await fetch(url+'/secrets/', requestOptions)
+    const res = await fetch(url+'/secrets/fetchmy', requestOptions)
     const resData = await res.json()
     console.log(resData)
     // setsecrets(resData)
@@ -73,7 +75,7 @@ export default function page() {
         setToast(true)
         }
         const resData = await res.json()
-        setsecrets([...secrets,resData])
+        router.push('/home')
         settitle("")
         setcontent("")
       }else{
@@ -105,7 +107,7 @@ export default function page() {
 
             </div>
         </div>}
-        {secrets[0].length===0?<Loading/>:<></>}
+        {secrets[0].length===0?<h1 className=' w-full text-center text-2xl font-semibold py-8'>Post your first secret!</h1>:<></>}
         <div className=' grid md:grid-cols-3 grid-cols-1 lg:grid-cols-3 gap-5 w-full py-8'>
         <div className=' flex flex-col w-full gap-5 '>
           {(secrets[0]).map((secret, index) => (<SecretCard key={index} secret={secret} index={index}/>))}
