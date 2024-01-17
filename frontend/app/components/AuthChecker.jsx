@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 import Toast from "./Toast"
 
-export default function () {
+export default function AuthChecker() {
     const {setAuthenticated, setToken, token, user, setUser, error, text, showToast, warning, setToast, setError, setWarning} = store()
     const path = usePathname()
     const url = process.env.NEXT_PUBLIC_BACKEND_URL;
