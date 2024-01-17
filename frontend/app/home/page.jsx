@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar'
 import SecretCard from '../components/SecretCard'
 import store from '@/lib/zustand'
 import Loading from '../components/Loading'
-export default function page() {
+export default function Page() {
   const [title, settitle] = useState("")
   const [content, setcontent] = useState("")
   const { setText, setToast, setError, toast } = store()

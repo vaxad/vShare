@@ -7,7 +7,7 @@ import store from "@/lib/zustand"
 import { useEffect, useRef, useState } from "react"
 
 
-export default function page({params}) {
+export default function Page({params}) {
     const [secret, setsecret] = useState(null)
     const [comments,setcomments] = useState([])
     const inputRef = useRef(null)

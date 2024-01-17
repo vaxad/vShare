@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar"
 import { useRouter } from "next/navigation"
 import store from "@/lib/zustand"
 
-export default function page() {
+export default function Page() {
     const url = process.env.NEXT_PUBLIC_BACKEND_URL
     const [name, setname] = useState("")
     const [email, setemail] = useState("")
