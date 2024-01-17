@@ -1,6 +1,6 @@
 # vShare - Secret Sharing App
 
-vShare is a secret-sharing application that provides a platform for users to share their thoughts, experiences, and secrets anonymously. It ensures a secure and confidential environment, allowing users to interact with shared content while maintaining their privacy.
+vShare is a secret-sharing application deployed on [vercel](https://v-share-obmjob5ot-vaxad.vercel.app/) that provides a platform for users to share their thoughts, experiences, and secrets anonymously. It ensures a secure and confidential environment, allowing users to interact with shared content while maintaining their privacy.
 
 ## Features
 
