@@ -225,6 +225,12 @@ The server will start at `http://localhost:5000`.
 
 ## Frontend
 
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 - Landing Page
 - Home: Homepage to view/post secrets
 - Me: View your shared secrets
